@@ -1,19 +1,47 @@
 import './App.css'
 import GamePage from './pages/GamePage'
-import LoginForm from './pages/LoginForm'
-import ProtectedRoute from './pages/ProtectedRoute'
-import { Routes, Route } from 'react-router-dom'
+import LoginPage from './pages/LoginPage'
+import { useAuth } from './services/AuthProvider'
 
 function App() {
+    const {
+        initialized,
+        authenticated,
+        user,
+        logout,
+    } = useAuth()
+
+    if (!initialized) {
+        return <div>Loading...</div>
+    }
+
+    if (!authenticated) {
+        return <LoginPage />
+    }
 
     return (
         <div>
-            <Routes>
-                <Route path="/" element={<LoginForm />}/>
-                    <Route element={<ProtectedRoute />}>
-                        <Route path="/games" element={<GamePage />}/>
-                    </Route>
-            </Routes>
+            <header
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    padding: "15px",
+                    borderBottom: "1px solid #ddd",
+                }}
+            >
+                <div>
+                    Welcome,{" "}
+                    <strong>
+                        {user?.preferred_username}
+                    </strong>
+                </div>
+
+                <button onClick={logout}>
+                    Logout
+                </button>
+            </header>
+
+            <GamePage />
         </div>
     )
 }

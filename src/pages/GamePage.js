@@ -1,8 +1,8 @@
 import '../App.css'
 import { useState, useEffect } from 'react'
 import { getAllGames, getGameById, deleteGame, updateGame, addGame } from '../services/game-service'
-import { logInfo, logError, logWarn } from '../services/log-utils'
-import { gameSearchCounter, errorCounter, requestDuration } from '../services/metric-utils'
+// import { logInfo, logError, logWarn } from '../services/log-utils'
+// import { gameSearchCounter, errorCounter, requestDuration } from '../services/metric-utils'
 
 import GameModal from "../modals/GameModal"
 
@@ -23,31 +23,31 @@ function GamePage() {
             const response = await getAllGames(platform, status)
             setGames(response.data)
 
-            gameSearchCounter.add(1, { platform, status })
-            logInfo('Lấy data game.', { platform, status })
+            // gameSearchCounter.add(1, { platform, status })
+            // logInfo('Lấy data game.', { platform, status })
 
-            const duration = (performance.now() - startTime) / 1000 // Convert to seconds
-            requestDuration.record(duration, {
-                'http.request.method': 'GET',
-                'http.response.status_code': response.status,
-                'http.route': `/games?platform=${platform}&status=${status}`,
-                'url.path': `/games?platform=${platform}&status=${status}`,
-                'url.scheme': window.location.protocol.replace(':', ''),
-            })
+            // const duration = (performance.now() - startTime) / 1000 // Convert to seconds
+            // requestDuration.record(duration, {
+            //     'http.request.method': 'GET',
+            //     'http.response.status_code': response.status,
+            //     'http.route': `/games?platform=${platform}&status=${status}`,
+            //     'url.path': `/games?platform=${platform}&status=${status}`,
+            //     'url.scheme': window.location.protocol.replace(':', ''),
+            // })
 
         } catch (error) {
             console.log(error)
-            errorCounter.add(1, { operation: 'fetchGames' })
-            logError('Lấy data fail.', { error: error.message })
+            // errorCounter.add(1, { operation: 'fetchGames' })
+            // logError('Lấy data fail.', { error: error.message })
 
-            const duration = (performance.now() - startTime) / 1000 // Convert to seconds
-            requestDuration.record(duration, {
-                'http.request.method': 'GET',
-                'http.response.status_code': 0,
-                'http.route': `/games?platform=${platform}&status=${status}`,
-                'url.path': `/games?platform=${platform}&status=${status}`,
-                'url.scheme': window.location.protocol.replace(':', ''),
-            })
+            // const duration = (performance.now() - startTime) / 1000 // Convert to seconds
+            // requestDuration.record(duration, {
+            //     'http.request.method': 'GET',
+            //     'http.response.status_code': 0,
+            //     'http.route': `/games?platform=${platform}&status=${status}`,
+            //     'url.path': `/games?platform=${platform}&status=${status}`,
+            //     'url.scheme': window.location.protocol.replace(':', ''),
+            // })
         }
     }
 
@@ -65,10 +65,10 @@ function GamePage() {
             )
             setModalOpen(false)
             fetchGames()
-            logInfo('Thêm game.', { selectedGame })
+            // logInfo('Thêm game.', { selectedGame })
         } catch (error) {
             console.error(error)
-            logError('Thêm game fail.', { error: error.message })
+            // logError('Thêm game fail.', { error: error.message })
         }
     }
 
@@ -77,10 +77,10 @@ function GamePage() {
             await updateGame(selectedGame.id, selectedGame.name, selectedGame.description, selectedGame.platform, selectedGame.status)
             setModalOpen(false)
             fetchGames()
-            logInfo('Cập nhật game.', { selectedGame })
+            // logInfo('Cập nhật game.', { selectedGame })
         } catch (error) {
             console.error(error)
-            logError('Cập nhật game fail.', { error: error.message })
+            // logError('Cập nhật game fail.', { error: error.message })
         }
     }
 
@@ -91,10 +91,10 @@ function GamePage() {
             await deleteGame(id)
             setModalOpen(false)
             fetchGames()
-            logInfo('Xóa game.', { id })
+            // logInfo('Xóa game.', { id })
         } catch (error) {
             console.error(error)
-            logError('Xóa game fail.', { error: error.message })
+            // logError('Xóa game fail.', { error: error.message })
         }
     }
 
@@ -108,7 +108,7 @@ function GamePage() {
 
         setModalMode("add")
         setModalOpen(true)
-        logInfo('Mở ô thêm game.', {})
+        // logInfo('Mở ô thêm game.', {})
     }
 
     const openEditModal = async (id) => {
@@ -117,17 +117,17 @@ function GamePage() {
             setSelectedGame(game.data)
             setModalMode("edit")
             setModalOpen(true)
-            logInfo('Mở ô cập nhật game.', { id })
+            // logInfo('Mở ô cập nhật game.', { id })
         } catch (error) {
             console.log(error)
-            logInfo('Mở ô cập nhật game fail.', { error: error.message })
+            // logInfo('Mở ô cập nhật game fail.', { error: error.message })
         }
     }
 
     const closeModal = () => {
         setModalOpen(false)
         setSelectedGame(null)
-        logInfo('Đóng ô.', {})
+        // logInfo('Đóng ô.', {})
     }
 
     return (
